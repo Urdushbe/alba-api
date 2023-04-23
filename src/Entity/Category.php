@@ -12,10 +12,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ApiResource(
     normalizationContext: [
-        'groups' => ['user:read'],   //o'qishga ruxsat
+        'groups' => ['category:read'],   //o'qishga ruxsat
     ],
     denormalizationContext: [
-        'groups' => ['user:write'],  //yozishga ruxsat
+        'groups' => ['category:write'],  //yozishga ruxsat
     ]
 )]
 class Category
@@ -23,15 +23,15 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read'])]
+    #[Groups(['category:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['category:read', 'category:write'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Job::class)]
-    #[Groups(['user:read'])]
+    #[Groups(['category:read'])]
     private Collection $jobs;
 
     public function __construct()

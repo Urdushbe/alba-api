@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\JobRepository;
 use Doctrine\DBAL\Types\Types;
@@ -11,43 +14,47 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: JobRepository::class)]
 #[ApiResource(
     normalizationContext: [
-        'groups' => ['user:read'],   //o'qishga ruxsat
+        'groups' => ['job:read'],   //o'qishga ruxsat
     ],
     denormalizationContext: [
-        'groups' => ['user:write'],  //yozishga ruxsat
+        'groups' => ['job:write'],  //yozishga ruxsat
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial', 'category' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'name'])]
+
+
 class Job
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read'])]
+    #[Groups(['job:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['job:read', 'job:write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['job:read', 'job:write'])]
     private ?string $text = null;
 
     #[ORM\Column]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['job:read', 'job:write'])]
     private ?int $person = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['job:read', 'job:write'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['job:read', 'job:write'])]
     private ?string $tel = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobs')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['job:read', 'job:write'])]
     private ?Category $category = null;
 
     public function getId(): ?int
