@@ -40,7 +40,7 @@ class Job
     #[Groups(['job:read', 'job:write'])]
     private ?string $text = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::TEXT)]
     #[Groups(['job:read', 'job:write'])]
     private ?int $person = null;
 
